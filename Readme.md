@@ -1,17 +1,17 @@
-# 📝 Legal Sentiment Analysis using IBM Watsonx.ai
+# 🎓 College Feedback Classifier using IBM Watsonx.ai
 
 ## 📌 Project Overview
 
-The **Legal Sentiment Analysis** project is an AI-powered system designed to classify legal or general text data into sentiment categories such as **Positive**, **Negative**, and **Neutral**. Leveraging IBM Watsonx foundation models and prompt engineering, this project enables organizations to extract actionable sentiment insights from unstructured text, supporting better decision-making in legal, business, or customer feedback contexts.
+The **College Feedback Classifier** is an AI-powered system designed to categorize open-ended student feedback into structured categories such as **Academics**, **Facilities**, and **Administration**. By using IBM Watsonx foundation models and prompt engineering, this project enables educational institutions to extract actionable insights and improve student satisfaction across various departments.
 
 ---
 
 ## 🎯 Objectives
 
-- Automatically analyze and classify text sentiment using large language models.
-- Organize feedback or legal statements into Positive, Negative, or Neutral categories.
-- Generate sentiment-based insights for reports and analytics.
-- Leverage IBM Watsonx Foundation Models with few-shot prompting for robust results.
+- Automatically classify student feedback using large language models.
+- Organize feedback into meaningful themes: Academics, Facilities, Administration.
+- Generate department-wise insights for decision-makers.
+- Leverage IBM Watsonx Foundation Models with few-shot prompting.
 
 ---
 
@@ -25,50 +25,49 @@ The **Legal Sentiment Analysis** project is an AI-powered system designed to cla
 | Data Format          | CSV                                 |
 | Prompting            | Few-shot Prompt Engineering         |
 | Libraries            | `pandas`, `sklearn`, `ibm_watson_machine_learning` |
-| IDEs                 | Jupyter Notebook / Google Colab     |
+| IDEs                 | Google Colab / Jupyter Notebook     |
 
 ---
 
 ## 📂 Dataset Format
 
-**CSV File Name:** `legal_sentiment_dataset.csv` (or similar)
+**CSV File Name:** `student_feedback.csv`
 
-| Phrase                                                    | Sentiment |
-|-----------------------------------------------------------|-----------|
-| The contract was fulfilled on time and without issues.     | 1         |
-| The service was unsatisfactory and delayed.                | -1        |
-| The agreement was signed.                                 | 0         |
-| ...                                                       | ...       |
+| feedback_text                                                              | category       |
+|-----------------------------------------------------------------------------|----------------|
+| The sports ground needs better lighting for evening practice.             | Facilities     |
+| The course materials should be made available online.                      | Academics      |
+| The admissions helpline is difficult to reach during peak times.          | Administration |
+| ...                                                                         | ...            |
 
-- Sentiment labels: `1` (Positive), `0` (Neutral), `-1` (Negative)
+- Total entries: 180+
+- Categories: `Academics`, `Facilities`, `Administration`
 
 ---
 
 ## 🧠 IBM Foundation Models Used
 
 - **Model Options:**
-  - `FLAN_T5_XXL`
+  - `FLAN_T5_XL`
   - `MISTRAL_7B_INSTRUCT`
 - **Approach:**
-  - Few-shot prompting with labeled examples for each sentiment
-  - Zero-shot fallback for short or ambiguous text
+  - Few-shot prompting with ~3 labeled examples per category
+  - Zero-shot fallbacks for short feedback
 
 ---
 
 ## 🧪 Prompt Template (Few-Shot)
 
 ```
-Determine the sentiment of the following sentence (as 'positive', 'negative', or 'neutral'). Use the examples below as reference:
+Categorize the following student feedback into one of the following:
+Academics, Facilities, or Administration.
 
-Example 1: sentence: The contract was fulfilled on time and without issues.
-sentiment: positive
-Example 2: sentence: The service was unsatisfactory and delayed.
-sentiment: negative
-Example 3: sentence: The agreement was signed.
-sentiment: neutral
+Example 1: "The syllabus includes real-world examples." → Academics  
+Example 2: "The hostel bathrooms are rarely cleaned." → Facilities  
+Example 3: "The admin office takes too long to process forms." → Administration
 
-sentence: {Phrase}
-sentiment:
+Feedback: "{feedback_text}"  
+Category:
 ```
 
 ---
@@ -77,32 +76,32 @@ sentiment:
 
 ### 1. **Data Preparation**
 
-* Load the sentiment dataset (e.g., `legal_sentiment_dataset.csv`)
-* Preprocess and remove empty or invalid rows
+* Load `student_feedback.csv`
+* Preprocess and remove empty rows
 
 ### 2. **IBM Watsonx.ai Setup**
 
 * Authenticate using API key and project ID
 * Select and initialize the foundation model
 
-### 3. **Prompt-Based Sentiment Classification**
+### 3. **Prompt-Based Classification**
 
-* For each text entry:
+* For each feedback entry:
   * Insert it into the prompt template
   * Send prompt to model
-  * Extract predicted sentiment
+  * Extract predicted category
 
 ### 4. **Result Structuring**
 
-* Save outputs to a new CSV: `legal_sentiment_results.csv`
+* Save outputs to a new CSV: `classified_feedback.csv`
 * Optionally evaluate with labeled data (if available)
 
 ### 5. **Analytics & Reporting**
 
 * Generate:
-  * Sentiment distribution chart
-  * Frequent words/phrases for each sentiment
-  * Summary statement of overall sentiment
+  * Category distribution pie chart
+  * Frequent word clouds per category
+  * Department-wise counts
 
 ---
 
@@ -125,12 +124,12 @@ pip install pandas scikit-learn ibm-watson-machine-learning
 Run the Jupyter Notebook (or Python script):
 
 ```bash
-jupyter notebook Legal_Sentiment_Analysis.ipynb
+python classify_feedback.py
 ```
 
 Or on Google Colab:
 
-1. Upload your sentiment dataset CSV
+1. Upload `student_feedback.csv`
 2. Run notebook cells (authentication → model → classification)
 3. Download output CSV
 
@@ -138,22 +137,22 @@ Or on Google Colab:
 
 ## 📊 Output
 
-**Output File:** `legal_sentiment_results.csv`
+**Output File:** `classified_feedback.csv`
 
-| Phrase                                               | Predicted Sentiment |
-|------------------------------------------------------|---------------------|
-| The contract was fulfilled on time and without issues.| positive            |
-| The service was unsatisfactory and delayed.           | negative            |
-| The agreement was signed.                             | neutral             |
+| feedback_text                                           | predicted_category |
+| -------------------------------------------------------- | ------------------- |
+| The cafeteria is overcrowded during lunch hours.         | Facilities          |
+| The faculty encourages interactive discussions in class. | Academics           |
+| The admin office lost my scholarship form.               | Administration      |
 
 ---
 
 ## 📈 Future Improvements
 
-* Add support for more granular sentiment (e.g., very positive, very negative)
-* Use multilingual models for non-English text
-* Build a dashboard for real-time sentiment analytics
-* Integrate with legal or business workflow tools
+* Add more fine-grained categories (e.g., Hostel, Canteen, Library)
+* Use multilingual models for regional feedback
+* Build a web dashboard for real-time feedback visualization
+* Integrate with college portals for direct feedback intake
 
 ---
 
